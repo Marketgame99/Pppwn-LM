@@ -80,7 +80,7 @@
 #define kdlsym_addr_copyinstr_patch1 0xffffffff82471ba3
 #define kdlsym_addr_copyinstr_patch2 0xffffffff82471baf
 #define kdlsym_addr_copyinstr_patch3 0xffffffff82471be0
-
+// FIRMWARE 10.00/10.01
 #elif (FIRMWARE == 1000 || FIRMWARE == 1001) // FW 10.00/10.01
 
 #define kdlsym_addr_Xfast_syscall 0xffffffff822001c0
@@ -102,6 +102,12 @@
 #define kdlsym_addr_copyinstr_patch1 0xffffffff82673413
 #define kdlsym_addr_copyinstr_patch2 0xffffffff8267341f
 #define kdlsym_addr_copyinstr_patch3 0xffffffff82673450
+
+// libkernel_sys.srpx 
+#define _scePthreadAttrInit_offset 0x0014000 
+#define _scePthreadAttrSetstacksize_offset 0x0013fe0
+#define _scePthreadCreate_offset 0x0014260
+#define _thr_initial_offset 0x8E830
 
 
 #elif FIRMWARE == 1100 // FW 11.00
