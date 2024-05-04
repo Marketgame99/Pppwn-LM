@@ -27,7 +27,7 @@ The exploit only prints `PPPwned` on your PS4 as a proof-of-concept. In order to
 On your computer, clone the repository:
 
 ```sh
-git clone --recursive https://github.com/TheOfficialFloW/PPPwn
+git clone --recursive https://github.com/LightningMods/PPPwn
 ```
 
 Install the requirements:
