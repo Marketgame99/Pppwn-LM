@@ -89,7 +89,7 @@ struct sce_proc * proc_find_by_name(uint8_t * kbase,
   }
   //printf("after name\n");
 
-  p = * (struct proclist ** )(kbase + all_proc_offset);
+  p = ((struct sce_proc * )(kbase + all_proc_offset)) -> p_forw;
   do {
     // printf("p->p_comm: %s\n", p->p_comm);
     if (!memcmp(p -> p_comm, name, strlen(name))) {
@@ -127,7 +127,7 @@ int shellui_patch(struct thread * td, uint8_t * kbase) {
   size_t n;
   void * M_TEMP = (void * )(kbase + M_TEMP_offset);
   uint64_t kaslr_offset = rdmsr(MSR_LSTAR) - kdlsym_addr_Xfast_syscall;
-  void( * free)(void * ptr, int type) = (void * )(kbase + free_offset);
+  void( * free)(void * ptr, void * type) = (void * )(kbase + free_offset);
   int( * printf)(const char * format, ...) = (void * ) kdlsym(printf);
 
   struct proc_vm_map_entry * entries = NULL;
@@ -236,7 +236,7 @@ int shellcore_fpkg_patch(struct thread * td, uint8_t * kbase) {
   };
 
   void * M_TEMP = (void * )(kbase + M_TEMP_offset);
-  void( * free)(void * ptr, int type) = (void * )(kbase + free_offset);
+  void( * free)(void * ptr, void * type) = (void * )(kbase + free_offset);
   uint64_t kaslr_offset = rdmsr(MSR_LSTAR) - kdlsym_addr_Xfast_syscall;
   int( * printf)(const char * format, ...) = (void * ) kdlsym(printf);
 
@@ -248,7 +248,7 @@ int shellcore_fpkg_patch(struct thread * td, uint8_t * kbase) {
     0x90
   };
 
-  struct proc * ssc = proc_find_by_name(kbase, "SceShellCore");
+  struct sce_proc * ssc = proc_find_by_name(kbase, "SceShellCore");
 
   if (!ssc) {
     ret = -1;
@@ -471,7 +471,7 @@ void stage2(void) {
 #if !ENABLE_DEBUG_MENU
   memcpy( & notify.message, "PPPwned: Payload Injected successfully", 40);
 #else
-  memcpy( & notify.message, "PPPwned: Debug Settings enabled", 33);
+  memcpy( & notify.message, "PPPwned: Debug Settings enabled", 32);
 #endif
    int fd;
 
@@ -505,7 +505,7 @@ void stage2(void) {
     ksys_close(td, fd);
   }
 
-return 0;
+return;
 #endif
 
   #if USB_LOADER
@@ -563,7 +563,7 @@ return 0;
   vm_map_unlock(map);
   if (r) {
     printf("failed to allocate payload memory!\n");
-    return r;
+    return;
   }
   printf("Allocated payload memory @ 0x%016lx\n", PAYLOAD_BASE);
   printf("Writing payload...\n");
@@ -577,7 +577,7 @@ return 0;
 
     if(payload_size >= 0x400000){
         printf("Size %d too big\n", payload_size);
-        return 1;
+        return;
     }
 
     memset(&iov, NULL, sizeof(iov));
@@ -601,7 +601,7 @@ return 0;
   #endif
   if (r) {
     printf("failed to write payload!\n");
-    return r;
+    return;
   }
   printf("Wrote payload!\n");
   printf("Creating ShellCore payload thread...\n");
@@ -609,7 +609,7 @@ return 0;
   r = proc_create_thread(td, kbase, p, PAYLOAD_BASE);
   if (r) {
     printf("failed to create payload thread!\n");
-    return r;
+    return;
   }
   printf("Created payload thread!\n");
 

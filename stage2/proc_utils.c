@@ -2,7 +2,7 @@
 #include "elf.h"
 #include "offsets.h"
 
-int proc_get_vm_map(struct thread *td, uint8_t *kbase, struct proc *p, struct proc_vm_map_entry **entries, uint64_t *num_entries) {
+int proc_get_vm_map(struct thread *td, uint8_t *kbase, struct sce_proc *p, struct proc_vm_map_entry **entries, uint64_t *num_entries) {
     struct proc_vm_map_entry *info = NULL;
     struct vm_map_entry *entry = NULL;
     int r = 0;
@@ -68,12 +68,12 @@ error:
     return 0;
 }
 
-int proc_rw_mem(struct thread *td, uint8_t *kbase, struct proc *p, void *ptr, uint64_t size, void *data, uint64_t *n, int write) {
+int proc_rw_mem(struct thread *td, uint8_t *kbase, struct sce_proc *p, void *ptr, uint64_t size, void *data, uint64_t *n, int write) {
     struct iovec iov;
     struct uio uio;
     
     int r = 0;
-    int (*proc_rwmem)(struct proc *p, struct uio *uio) = (void *)(kbase + proc_rmem_offset);
+    int (*proc_rwmem)(struct sce_proc *p, struct uio *uio) = (void *)(kbase + proc_rmem_offset);
     uint64_t kaslr_offset = rdmsr(MSR_LSTAR) - kdlsym_addr_Xfast_syscall;
     int (*printf)(const char *format, ...) = (void *)kdlsym(printf);
 
@@ -94,11 +94,11 @@ int proc_rw_mem(struct thread *td, uint8_t *kbase, struct proc *p, void *ptr, ui
         return 0;
     }
 
-    memset(&iov, NULL, sizeof(iov));
+    memset(&iov, 0, sizeof(iov));
     iov.iov_base = (uint64_t)data;
     iov.iov_len = size;
 
-    memset(&uio, NULL, sizeof(uio));
+    memset(&uio, 0, sizeof(uio));
     uio.uio_iov = (uint64_t)&iov;
     uio.uio_iovcnt = 1;
     uio.uio_offset = (uint64_t)ptr;
@@ -118,15 +118,15 @@ int proc_rw_mem(struct thread *td, uint8_t *kbase, struct proc *p, void *ptr, ui
     return r;
 }
 
-int proc_read_mem(struct thread *td, uint8_t *kbase, struct proc *p, void *ptr, uint64_t size, void *data, uint64_t *n) {
+int proc_read_mem(struct thread *td, uint8_t *kbase, struct sce_proc *p, void *ptr, uint64_t size, void *data, uint64_t *n) {
     return proc_rw_mem(td, kbase, p, ptr, size, data, n, 0);
 }
 
-int proc_write_mem(struct thread *td, uint8_t *kbase,struct proc *p, void *ptr, uint64_t size, void *data, uint64_t *n) {
+int proc_write_mem(struct thread *td, uint8_t *kbase, struct sce_proc *p, void *ptr, uint64_t size, void *data, uint64_t *n) {
     return proc_rw_mem(td, kbase, p, ptr, size, data, n, 1);
 }
 
-int proc_allocate(struct thread *td, uint8_t *kbase, struct proc *p, void **address, uint64_t size) {
+int proc_allocate(struct thread *td, uint8_t *kbase, struct sce_proc *p, void **address, uint64_t size) {
     uint64_t addr = NULL;
     int r = 0;
     void (*vm_map_lock)(struct vm_map *map) = (void *)(kbase + vm_map_lock_offset);
@@ -176,7 +176,7 @@ error:
     return r;
 }
 
-int proc_deallocate(struct thread* td, uint8_t* kbase,struct proc *p, void *address, uint64_t size) {
+int proc_deallocate(struct thread* td, uint8_t* kbase, struct sce_proc *p, void *address, uint64_t size) {
     int r = 0;
     void (*vm_map_lock)(struct vm_map *map) = (void *)(kbase + vm_map_lock_offset);
     int (*vm_map_unlock)(struct vm_map *map) = (void *)(kbase + vm_map_unlock_offset);
@@ -196,7 +196,7 @@ int proc_deallocate(struct thread* td, uint8_t* kbase,struct proc *p, void *addr
 }
 
 
-int proc_create_thread(struct thread *td, uint8_t *kbase, struct proc *p, uint64_t address) {
+int proc_create_thread(struct thread *td, uint8_t *kbase, struct sce_proc *p, uint64_t address) {
     void *rpcldraddr = NULL;
     void *stackaddr = NULL;
     struct proc_vm_map_entry *entries = NULL;
@@ -204,7 +204,7 @@ int proc_create_thread(struct thread *td, uint8_t *kbase, struct proc *p, uint64
     uint64_t n = 0;
     int r = 0;
     void* M_TEMP = (void*)(kbase + M_TEMP_offset);
-    void (*free)(void *ptr, int type) = (void *)(kbase + free_offset);
+    void (*free)(void *ptr, void *type) = (void *)(kbase + free_offset);
     
     int (*create_thread)(struct thread * td, uint64_t ctx, void (*start_func)(void *), void *arg, char *stack_base, uint64_t stack_size, char *tls_base, long *child_tid, long *parent_tid, uint64_t flags, uint64_t rtp) = (void *)(kbase + create_thread_offset);
     uint64_t kaslr_offset = rdmsr(MSR_LSTAR) - kdlsym_addr_Xfast_syscall;

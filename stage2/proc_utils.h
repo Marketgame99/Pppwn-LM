@@ -209,7 +209,9 @@ struct proc_vm_map_entry {
     uint16_t prot;
 } __attribute__((packed));
 
-int proc_read_mem(struct thread *td, uint8_t *kbase,struct proc *p, void *ptr, uint64_t size, void *data, uint64_t *n);
-int proc_write_mem(struct thread *td, uint8_t *kbase,struct proc *p, void *ptr, uint64_t size, void *data, uint64_t *n);
+int proc_read_mem(struct thread *td, uint8_t *kbase, struct sce_proc *p, void *ptr, uint64_t size, void *data, uint64_t *n);
+int proc_write_mem(struct thread *td, uint8_t *kbase, struct sce_proc *p, void *ptr, uint64_t size, void *data, uint64_t *n);
+int proc_get_vm_map(struct thread *td, uint8_t *kbase, struct sce_proc *p, struct proc_vm_map_entry **entries, uint64_t *num_entries);
+int proc_create_thread(struct thread *td, uint8_t *kbase, struct sce_proc *p, uint64_t address);
 void install_fself_hooks(uint8_t* kbase);
 

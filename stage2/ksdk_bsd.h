@@ -202,7 +202,7 @@ TYPE_END();
 
 
 TYPE_BEGIN(struct sce_proc, 0x800); // XXX: random, don't use directly without fixing it
-TYPE_FIELD(struct proc *p_forw, 0);
+TYPE_FIELD(struct sce_proc *p_forw, 0);
 TYPE_FIELD(TAILQ_HEAD(, thread) p_threads, 0x10);
 TYPE_FIELD(struct ucred *p_ucred, 0x40);
 TYPE_FIELD(struct filedesc *p_fd, 0x48);
