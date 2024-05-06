@@ -553,7 +553,7 @@ return;
 
   #if USB_LOADER
  void* buffer = NULL;
- void (*free)(void * ptr, int type) = (void *)(kbase + free_offset);
+ void (*free)(void * ptr, void * type) = (void *)(kbase + free_offset);
  void* M_TEMP = (void *)(kbase + M_TEMP_offset);
   void * ( * malloc)(unsigned long size, void * type, int flags) = (void * )(kbase + malloc_offset);
   fd = ksys_open(td, "/mnt/usb0/payload.bin", O_RDONLY, 0);
