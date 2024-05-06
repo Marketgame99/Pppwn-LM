@@ -1,6 +1,6 @@
-#include <ps4.h>
-#include "defines.h"
 #include "decrypt.h"
+#include "defines.h"
+#include <ps4.h>
 
 // #define DEBUG_SOCKET
 // #define DEBUG_IP "192.168.1.200"
@@ -13,8 +13,7 @@ static int (*sceKernelDebugOutText)(int,
 // size_t page_size = 0x4000;
 
 void *kernel_base = NULL;
-int kpayload(struct thread *td)
-{
+int kpayload(struct thread *td) {
   kernel_base = &((uint8_t *)__readmsr(0xC0000082))[-0x1C0];
 
   struct ucred *cred = td->td_proc->p_ucred;
@@ -41,8 +40,7 @@ int kpayload(struct thread *td)
   return 0;
 }
 
-int _main(struct thread *td)
-{
+int _main(struct thread *td) {
   UNUSED(td);
 
   char buf[255];
@@ -57,8 +55,7 @@ int _main(struct thread *td)
   RESOLVE(libk, sceKernelDebugOutText);
 
   // Output initialization messages
-  if (sceKernelDebugOutText)
-  {
+  if (sceKernelDebugOutText) {
     sceKernelDebugOutText(0, "==========================\n");
     sceKernelDebugOutText(0, "Hello From inside Shellcore!!!\n");
     sceKernelDebugOutText(0, "==========================\n");

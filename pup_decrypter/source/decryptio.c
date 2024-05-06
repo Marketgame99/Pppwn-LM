@@ -3,20 +3,16 @@
 
 #define chunksize 2097152
 
-ssize_t readbytes(const decrypt_state *state, size_t offset, size_t bytes, void *buffer, size_t buffersize)
-{
-  if (bytes > buffersize)
-  {
+ssize_t readbytes(const decrypt_state *state, size_t offset, size_t bytes, void *buffer, size_t buffersize) {
+  if (bytes > buffersize) {
     printf_debug("ReadBytes failed! - Error: Buffer is too small!\n");
     return -1;
   }
 
   ssize_t result = -1;
 
-  if (offset != 0)
-  {
-    switch (offset)
-    {
+  if (offset != 0) {
+    switch (offset) {
     case DIO_RESET:
       result = lseek(state->input_file, 0, SEEK_SET);
       break;
@@ -28,8 +24,7 @@ ssize_t readbytes(const decrypt_state *state, size_t offset, size_t bytes, void 
       break;
     }
 
-    if (result == -1)
-    {
+    if (result == -1) {
       int errcode = errno;
       printf_debug("ReadBytes seek_set failed! - Error: %d (%s)\n", errcode, strerror(errcode));
       return -1;
@@ -43,12 +38,10 @@ ssize_t readbytes(const decrypt_state *state, size_t offset, size_t bytes, void 
   size_t bytesread = 0;
   size_t bytesremaining = bytes;
 
-  while (bytesremaining > 0)
-  {
+  while (bytesremaining > 0) {
     result = read(state->input_file, buffer + bytesread, (bytesremaining >= rchunksize) ? rchunksize : bytesremaining);
 
-    if (result < 1)
-    {
+    if (result < 1) {
       break;
     }
 
@@ -56,8 +49,7 @@ ssize_t readbytes(const decrypt_state *state, size_t offset, size_t bytes, void 
     bytesremaining -= result;
   }
 
-  if ((result == -1) || (bytesread != bytes))
-  {
+  if ((result == -1) || (bytesread != bytes)) {
     int errcode = errno;
     printf_debug("Read failed; Read %zd of %zd bytes - Result: %d (%s)\n", bytesread, bytes,
                  errcode,
@@ -70,21 +62,17 @@ ssize_t readbytes(const decrypt_state *state, size_t offset, size_t bytes, void 
   return bytesread;
 }
 
-ssize_t writebytes(const decrypt_state *state, size_t offset, size_t bytes, void *buffer, size_t buffersize)
-{
-  if (bytes > buffersize)
-  {
+ssize_t writebytes(const decrypt_state *state, size_t offset, size_t bytes, void *buffer, size_t buffersize) {
+  if (bytes > buffersize) {
     printf_debug("WriteBytes failed! - Error: Buffer is too small!\n");
     return -1;
   }
 
   ssize_t result = -1;
 
-  if (offset != 0)
-  {
+  if (offset != 0) {
 
-    switch (offset)
-    {
+    switch (offset) {
     case DIO_RESET:
       result = lseek(state->output_file, 0, SEEK_SET);
       break;
@@ -96,8 +84,7 @@ ssize_t writebytes(const decrypt_state *state, size_t offset, size_t bytes, void
       break;
     }
 
-    if (result == -1)
-    {
+    if (result == -1) {
       int errcode = errno;
       printf_debug("WriteBytes seek_set failed! - Error: %d (%s)\n", errcode, strerror(errcode));
       return -1;
@@ -111,12 +98,10 @@ ssize_t writebytes(const decrypt_state *state, size_t offset, size_t bytes, void
   size_t byteswritten = 0;
   size_t bytesremaining = bytes;
 
-  while (bytesremaining > 0)
-  {
+  while (bytesremaining > 0) {
     result = write(state->output_file, buffer + byteswritten, (bytesremaining >= wchunksize) ? wchunksize : bytesremaining);
 
-    if (result < 1)
-    {
+    if (result < 1) {
       break;
     }
 
@@ -124,8 +109,7 @@ ssize_t writebytes(const decrypt_state *state, size_t offset, size_t bytes, void
     bytesremaining -= result;
   }
 
-  if ((result == -1) || (byteswritten != bytes))
-  {
+  if ((result == -1) || (byteswritten != bytes)) {
     int errcode = errno;
     printf_debug("Write failed; Write %zd of %zd bytes - Result: %d (%s)\n", byteswritten,
                  bytes, errcode,

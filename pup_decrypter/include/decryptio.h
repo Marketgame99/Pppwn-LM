@@ -1,7 +1,6 @@
 #include <ps4.h>
 
-typedef struct _decrypt_state
-{
+typedef struct _decrypt_state {
   char *input_path;
   ssize_t input_base_offset;
   int input_file;

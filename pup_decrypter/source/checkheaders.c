@@ -1,8 +1,8 @@
-#include <ps4.h>
-#include <assert.h>
+#include "bls.h"
 #include "encryptsrv_args.h"
 #include "pup.h"
-#include "bls.h"
+#include <assert.h>
+#include <ps4.h>
 
 #define CHECK_SIZE(x, y) static_assert(sizeof(x) == y, #x)
 
