@@ -9,6 +9,23 @@ static int (*sceKernelDebugOutText)(int,
 // size_t page_size = 0x4000;
 
 void *kernel_base = NULL;
+uint16_t fw_version = -1;
+
+#define icc_nvs_write_macro_alt(x) \
+  icc_nvs_write = (void *)(kernel_base + K##x##_ICC_NVS_WRITE);
+
+int kpayload_perm_uart_alt() {
+  uint64_t (*icc_nvs_write)(uint32_t block, uint32_t offset, uint32_t size, void *value);
+
+  // NOTE: This is a C preprocessor macro
+  build_kpayload(fw_version, icc_nvs_write_macro_alt);
+
+  char uart = 1;
+  icc_nvs_write(4, 0x31F, 1, &uart);
+
+  return 0;
+}
+
 int kpayload(struct thread *td) {
   kernel_base = &((uint8_t *)__readmsr(0xC0000082))[-0x1C0];
 
@@ -32,13 +49,6 @@ int kpayload(struct thread *td) {
   // sceSblACMgrHasSceProcessCapability
   uint64_t *sceProcCap = (uint64_t *)(((char *)td_ucred) + 104);
   *sceProcCap = 0xffffffffffffffff; // Sce Process
-
-  uint64_t (*icc_nvs_write)(uint32_t block, uint32_t offset, uint32_t size, void *value);
-
-  icc_nvs_write = (void *)(kernel_base + K1100_ICC_NVS_WRITE);
-
-  char uart = 1;
-  icc_nvs_write(4, 0x31F, 1, &uart);
 
   return 0;
 }
@@ -74,6 +84,9 @@ int _main(struct thread *td) {
 
   // sceKernelDebugOutText(0, "called enable_perm_uart()\n");
   // enable_perm_uart();
+
+  fw_version = get_firmware();
+  syscall(11, &kpayload_perm_uart_alt, NULL);
 
   printf_notification("Enabled UART!");
 
