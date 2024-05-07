@@ -33,6 +33,13 @@ int kpayload(struct thread *td) {
   uint64_t *sceProcCap = (uint64_t *)(((char *)td_ucred) + 104);
   *sceProcCap = 0xffffffffffffffff; // Sce Process
 
+  uint64_t (*icc_nvs_write)(uint32_t block, uint32_t offset, uint32_t size, void *value);
+
+  icc_nvs_write = (void *)(kernel_base + K1100_ICC_NVS_WRITE);
+
+  char uart = 1;
+  icc_nvs_write(4, 0x31F, 1, &uart);
+
   return 0;
 }
 
@@ -65,19 +72,8 @@ int _main(struct thread *td) {
   // jailbreak();
   syscall(11, &kpayload, NULL);
 
-  printf_notification("kbase: %p, waiting 5 secs", kernel_base);
-  sceKernelSleep(5);
-
   // sceKernelDebugOutText(0, "called enable_perm_uart()\n");
   // enable_perm_uart();
-
-  uint64_t (*icc_nvs_write)(uint32_t block, uint32_t offset, uint32_t size, void *value);
-
-  icc_nvs_write = (void *)(kernel_base + K1100_ICC_NVS_WRITE);
-
-  sceKernelDebugOutText(0, "called icc_nvs_write()\n");
-  char uart = 1;
-  icc_nvs_write(4, 0x31F, 1, &uart);
 
   printf_notification("Enabled UART!");
 
