@@ -387,7 +387,7 @@ void stage2(void) {
   memcpy((void * )(kbase + ptrace_p2), "\xE9\x7C\x02\x00\x00", 5);
 
    //patch sceSblACMgrIsAllowedSystemLevelDebugging
- memcpy((void * )(kbase + sceSblACMgrIsAllowedSystemLevelDebugging_p), "\x48\xC7\xC0\x01\x00\x00\x00\xC3", 8); //900
+ memcpy((void * )(kbase + sceSblACMgrIsAllowedSystemLevelDebugging_p), "\x31\xC0\xFF\xC0\xC3", 5); //900
 #endif
   // patch ASLR, thanks 2much4u
   *(uint16_t * )(kbase + disable_aslr_p) = 0x9090;

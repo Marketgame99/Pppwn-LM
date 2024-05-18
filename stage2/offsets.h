@@ -389,7 +389,7 @@
 #define _thr_initial_offset 0x8E830
 
 //kern
-#define vm_map_protect_p 0x0035C710
+#define vm_map_protect_p 0x35C8EC
 #define ptrace_p 0x00384285
 #define ptrace_p2 0x00384771
 #define disable_aslr_p 0x003B11A4
