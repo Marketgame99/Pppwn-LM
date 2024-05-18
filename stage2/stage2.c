@@ -454,6 +454,20 @@ void stage2(void) {
   kmem[1] = 0xE9;
 #endif
 #else
+#if FIRMWARE == 903 // FW 9.03, 9.00 already has goldhen
+	// Patch debug setting errors
+	kmem = (uint8_t *)&kbase[0x004e6d48];
+	kmem[0] = 0x00;
+	kmem[1] = 0x00;
+	kmem[2] = 0x00;
+	kmem[3] = 0x00;
+
+	kmem = (uint8_t *)&kbase[0x004e802f];
+	kmem[0] = 0x00;
+	kmem[1] = 0x00;
+	kmem[2] = 0x00;
+	kmem[3] = 0x00;
+#endif
 #if FIRMWARE == 1100 // FW 11.00, 9.00 already has goldhen
 	// Patch debug setting errors
 	kmem = (uint8_t *)&kbase[0x004EE328];
