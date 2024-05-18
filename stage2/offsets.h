@@ -149,7 +149,7 @@
 //kern
 #define vm_map_protect_p 0x00080B8B // Identical to 9.00
 #define ptrace_p 0x41D455
-#define ptrace_p2 0x41F9D5
+#define ptrace_p2 0x41D941
 #define disable_aslr_p 0x5F824 // Identical to 9.00
 #define sceSblACMgrIsAllowedSystemLevelDebugging_p 0x0001D1C0 // Identical to 9.00
 #define kemem_2 0x37A144
@@ -160,7 +160,7 @@
 #define malloc_offset 0x003017B0
 #define free_offset 0x00301970
 #define vm_map_lock_read_offset 0x0007BB80 // Identical to 9.00
-#define vm_map_unlock_read_offset 0x0007BBD0 // Identical to 9.00 (I need to check this one)
+#define vm_map_unlock_read_offset 0x0007BBD0 // Identical to 9.00
 #define vm_map_lookup_entry_offset 0x0007C1C0 // Identical to 9.00
 #define M_TEMP_offset 0x0155E1E0
 #define proc_rmem_offset 0x0041CA70
