@@ -233,7 +233,7 @@
 #define ptrace_p 0x0047A005
 #define ptrace_p2 0x0047A4F1
 #define disable_aslr_p 0x0029AE74
-#define sceSblACMgrIsAllowedSystemLevelDebugging_p 0x00414530 
+#define sceSblACMgrIsAllowedSystemLevelDebugging_p 0x0006D0DD 
 #define kemem_2 0x00188AA3
 #define kemem_1 0x00188A9A
 #define vm_map_lock_offset 0x00191BE0
@@ -245,7 +245,7 @@
 #define vm_map_unlock_read_offset 0x00191D80
 #define vm_map_lookup_entry_offset 0x00192370
 #define M_TEMP_offset 0x01A4ECB0 
-#define proc_rmem_offset 0x001506EA
+#define proc_rmem_offset 0x00479620
 #define vm_map_findspace_offset 0x00194DF0
 #define vm_map_delete_offset 0x00194830
 #define create_thread_offset 0x001EC430
