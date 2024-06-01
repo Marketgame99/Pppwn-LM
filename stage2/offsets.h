@@ -234,8 +234,8 @@
 #define ptrace_p2 0x0047A4F1
 #define disable_aslr_p 0x0029AE74
 #define sceSblACMgrIsAllowedSystemLevelDebugging_p 0x001E2BB0 
-#define kemem_2 0x00188AA3
-#define kemem_1 0x00188A9A
+#define kemem_2 0x00188AA4
+#define kemem_1 0x00188A9C
 #define vm_map_lock_offset 0x00191BE0
 #define vm_map_insert_offset 0x00192F30
 #define vm_map_unlock_offset 0x00191C50 

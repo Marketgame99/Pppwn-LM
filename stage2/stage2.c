@@ -490,12 +490,12 @@ void stage2(void) {
 #endif
 #if FIRMWARE == 960 
 	// Patch debug setting errors
-	kmem = (uint8_t *)&kbase[0x004e9036];
+	kmem = (uint8_t *)&kbase[0x004e9038];
 	kmem[0] = 0x00;
 	kmem[1] = 0x00;
 	kmem[2] = 0x00;
 	kmem[3] = 0x00;
-	kmem = (uint8_t *)&kbase[0x004ea06d];
+	kmem = (uint8_t *)&kbase[0x004ea06f];
 	kmem[0] = 0x00;
 	kmem[1] = 0x00;
 	kmem[2] = 0x00;
