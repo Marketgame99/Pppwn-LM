@@ -203,7 +203,7 @@
 #define enable_data_mount_patch 0x0031D651
 #define enable_fpkg_patch 0x003D4E9F
 #define fake_free_patch 0x00FBD319 
-#define pkg_installer_patch 0x009FB810
+#define pkg_installer_patch 0x009FB811
 #define ext_hdd_patch 0x00610AED 
 #define debug_trophies_patch 0x00741E09 
 
