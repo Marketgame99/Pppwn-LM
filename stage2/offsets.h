@@ -218,7 +218,7 @@
 
 
 #define sys_debug_menu 0x0001CE50
-#define sys_debug_menu_1 0x0001CEB0
+#define sys_debug_menu_1 0x0001D1B0
 #endif
 
 // libkernel_sys.srpx
